@@ -7,21 +7,8 @@ from airflow.operators.generic_transfer import GenericTransfer
 from datetime import datetime, timedelta
 from pendulum import timezone
 
-from airflow.providers.postgres.hooks.postgres import PostgresHook
-import os
+from functions.helpers import get_table_data
 
-def save_data(df,filename:str):
-    outdir = '/opt/airflow/dags/data'
-    if not os.path.exists(outdir):
-        os.mkdir(outdir)
-    df.to_csv(f'{outdir}/{filename}',index=False)
-
-def get_actor_table():
-    query = """SELECT * FROM public.actor"""
-    postgres_hook = PostgresHook(postgres_conn_id='transactional',schema='dvdrental')
-    sales = postgres_hook.get_pandas_df(sql=query)
-    save_data(sales,'actor.csv')
-    
 with DAG(
     dag_id='populate_dw',
     default_args={
@@ -38,10 +25,14 @@ with DAG(
 
     start = EmptyOperator(task_id='start')
 
-    get_actor_table = PythonOperator(
-        task_id = 'get_actor_table',
-        python_callable  = get_actor_table
+    get_actor_data_to_analytical_db = GenericTransfer(
+        task_id='get_actor_data_to_analytical_db',
+        sql = 'sql/transactional/get_actor.sql',
+        destination_table = 'actor',
+        source_conn_id = 'transactional',
+        destination_conn_id = 'analytical',
+        preoperator = 'sql/analytical/create_or_truncate_actor.sql'
     )
 
 
-    start >> get_actor_table
+    start >> get_actor_data_to_analytical_db

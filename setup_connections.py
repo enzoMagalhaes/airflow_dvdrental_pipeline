@@ -19,7 +19,7 @@ analytical_dw_conn = Connection(
         login='postgres',
         password='password',
         port=5440,
-        schema='analytical'
+        schema='analytics'
 )
 
 session = settings.Session() # get the session
