@@ -25,6 +25,8 @@ airflow_worker.
 Airflow UI, ou executando o setup_connections.py dentro do container
 airflow_worker.
 
+3. acione o trigger da dag
+
 ## Fontes
 
 - [Create dynamic Airflow tasks](https://docs.astronomer.io/learn/dynamic-tasks)
