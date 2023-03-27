@@ -5,7 +5,7 @@ from datetime import datetime
 from psycopg2.errors import UndefinedTable
 
 
-class TestPostgresDBPipeline:
+class TestMultipleTableTransferPipeline:
     input_db_hook = PostgresHook(postgres_conn_id="transactional", database="dvdrental")
     output_db_hook = PostgresHook(postgres_conn_id="analytical", database="analytics")
 
