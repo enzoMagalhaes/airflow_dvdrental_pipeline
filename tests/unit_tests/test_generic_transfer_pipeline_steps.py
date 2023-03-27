@@ -41,8 +41,8 @@ class TestMultipleTableTransferPipeline:
         configs_operator = dag.get_task("generate_tables_transfer_configs")
         transfer_configs = configs_operator.python_callable()
 
-        # get load table task
-        load_table_task = dag.get_task("load_tables_task")
+        # get transfer tables task
+        transfer_tables_task = dag.get_task("transfer_tables_to_analytical_db")
 
         # checks data transfer for each table
         for config in transfer_configs:
@@ -54,8 +54,8 @@ class TestMultipleTableTransferPipeline:
                 self.output_db_hook.get_records(sql=f"SELECT 1 FROM {table} LIMIT 1")
 
             # executes transfer operation
-            transfer_operator = load_table_task.operator_class
-            partial_args = load_table_task.partial_kwargs
+            transfer_operator = transfer_tables_task.operator_class
+            partial_args = transfer_tables_task.partial_kwargs
             transfer_operator(
                 task_id="test_generic_transfer_instance",
                 sql=config["sql"],

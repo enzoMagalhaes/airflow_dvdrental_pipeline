@@ -43,7 +43,7 @@ TABLES = [
     catchup=False,
 )
 def extract_and_load_tables():
-    
+
     @task(task_id="generate_tables_transfer_configs")
     def generate_tables_configs(tables: list = TABLES) -> list:
         """
@@ -79,7 +79,7 @@ def extract_and_load_tables():
     # instantiates the GenericTransfer operator, sets static variables using .partial() 
     # and use .expand_kwargs() to execute the operator once for each config in the tables_configs list
     transfer_operator = GenericTransfer.partial(
-        task_id="load_tables_task",
+        task_id="transfer_tables_to_analytical_db",
         source_conn_id="transactional",
         destination_conn_id="analytical",
     ).expand_kwargs(generate_tables_configs())
