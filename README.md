@@ -1,17 +1,35 @@
 
 #  Airflow Dvdrental Pipeline
 
-  Airflow dvdrental pipeline é uma pipeline Extract-and-Load desenvolvida inteiramente em Python utilizando a framework de orquestração de dados Apache Airflow que coleta dados de tabelas de um banco transacional e 
-  os insere em um banco de analytics:
+Airflow dvdrental pipeline é uma pipeline Extract-and-Load desenvolvida inteiramente em Python utilizando a framework de orquestração de dados Apache Airflow que coleta dados de tabelas de um banco transacional e 
+os insere em um banco de analytics:
 
-  ![fluxo](fluxo.png)
+![fluxo](fluxo.png)
+O projeto consiste apenas numa simples e concisa DAG e o script de orquestração da mesma pode ser achado no caminho "dags/populate_analytical_db.py". Segue uma imagem do DAG no Airflow UI:
 
-  O projeto consiste apenas numa simples e concisa DAG e o script de orquestração da mesma pode ser achado no caminho "dags/populate_analytical_db.py". Segue uma imagem do DAG no Airflow UI:
+![Dag](dag.png)
 
-  ![Dag](dag.png)
+A lógica da DAG é baseada no conceito de criação dinâmica de tasks
+do Airflow.
 
-  para 
+ATENCAO:
+as conexoes dos bancos de dados podem ser setadas manualmente usando o
+Airflow UI, ou executando o setup_connections.py dentro do container
+airflow_worker.
 
+## Como executar
+
+1. execute o script start.sh
+
+2. insira as conexões dos bancos de dados usando o
+Airflow UI, ou executando o setup_connections.py dentro do container
+airflow_worker.
+
+## Fontes
+
+- [Create dynamic Airflow tasks](https://docs.astronomer.io/learn/dynamic-tasks)
+
+- [Dynamic Task Mapping](https://airflow.apache.org/docs/apache-airflow/2.3.0/concepts/dynamic-task-mapping.html)
 
 ---
 
@@ -42,4 +60,5 @@
     ├── setup_connections.py                # seta as conexões dos bancos de dados
     ├── .gitignore
     ├── CHALLENGE.md
+    ├── start.sh
     └── README.md
